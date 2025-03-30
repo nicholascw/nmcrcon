@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "dbg.h"
 #include "socket.h"
 
 #define RCON_TYPE_RESP 0

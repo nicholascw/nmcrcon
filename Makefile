@@ -1,4 +1,4 @@
-CFLAGS=-g -std=gnu99 -I. -O3 -Wall -Wextra
+CFLAGS=-std=gnu99 -I. -O3 -Wall -Wextra
 LIBS=-lbestline
 SRC=$(wildcard *.c)
 HDR=$(wildcard *.h)
