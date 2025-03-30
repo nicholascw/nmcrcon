@@ -122,13 +122,13 @@ int socket_tryconnect(char *hostname, char *port) {
     char s[INET6_ADDRSTRLEN];
     inet_ntop(p->ai_family, _socket_get_in_addr((struct sockaddr *)p->ai_addr),
               s, sizeof s);
-    fprintf(stderr, "connecting to %s (%s:%s)...\n", hostname, s, port);
+    fprintf(stderr, "Connecting to %s (%s:%s)...\n", hostname, s, port);
     break;
   }
 
   freeaddrinfo(servinfo);
   if (!p) {
-    fprintf(stderr, "failed to connect.");
+    fprintf(stderr, "Failed to connect.\n");
     return -1;
   }
   return connfd;
