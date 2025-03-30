@@ -28,7 +28,7 @@ char *hints(const char *buf, const char **ansi1, const char **ansi2) {
 static int exit_now = 0;
 void _shell_sigint_hdlr(int sig) { exit_now = 1; }
 
-void _shell_rcon_auth(int rconfd) {
+int _shell_rcon_auth(int rconfd) {
   char *password = NULL;
   int failed_cnt = 0;
   do {
@@ -38,8 +38,8 @@ void _shell_rcon_auth(int rconfd) {
     password = bestline("Password: ");
     bestlineMaskModeDisable();
     if (!password) password = strdup("");
-    if (password[0] == '\0') return;
   } while (rcon_auth(rconfd, password) < 0 && failed_cnt < 3);
+  return -1;
 }
 
 void shell_loop(int rconfd) {
@@ -53,7 +53,7 @@ void shell_loop(int rconfd) {
 #endif
 #endif
   signal(SIGINT, _shell_sigint_hdlr);
-  _shell_rcon_auth(rconfd);
+  if (_shell_rcon_auth(rconfd) < 0) exit_now = 1;
   char *input_buf;
   while ((input_buf = bestline("nmcrcon> ")) && !exit_now) {
     if (input_buf[0] != '\0') {
@@ -61,9 +61,11 @@ void shell_loop(int rconfd) {
 #if HIST2DISK
       bestlineHistorySave("history.txt");
 #endif
-      if (!strcmp(input_buf, ".exit")) exit_now = 1;
-      if (!strcmp(input_buf, ".auth")) {
-        _shell_rcon_auth(rconfd);
+      if (input_buf[0] == '.') {
+        if (!strcmp(input_buf, ".exit")) exit_now = 1;
+        if (!strcmp(input_buf, ".auth")) {
+          _shell_rcon_auth(rconfd);
+        }
       } else {
         if (rcon_exec(rconfd, input_buf) < 0) exit_now = 1;
       }
