@@ -29,14 +29,17 @@ static int exit_now = 0;
 void _shell_sigint_hdlr(int sig) { exit_now = 1; }
 
 void _shell_rcon_auth(int rconfd) {
-  char *password;
-  bestlineMaskModeEnable();
-  password = bestline("Password: ");
-  bestlineMaskModeDisable();
-  if (!password) return;
-  if (password[0] == '\0') return;
-  if (rcon_auth(rconfd, password) < 0) exit_now = 1;
-  free(password);
+  char *password = NULL;
+  int failed_cnt = 0;
+  do {
+    if (password) free(password);
+    failed_cnt++;
+    bestlineMaskModeEnable();
+    password = bestline("Password: ");
+    bestlineMaskModeDisable();
+    if (!password) password = strdup("");
+    if (password[0] == '\0') return;
+  } while (rcon_auth(rconfd, password) < 0 && failed_cnt < 3);
 }
 
 void shell_loop(int rconfd) {
@@ -64,8 +67,7 @@ void shell_loop(int rconfd) {
       } else {
         if (rcon_exec(rconfd, input_buf) < 0) exit_now = 1;
       }
-      free(input_buf);
     }
-    return;
+    if (input_buf) free(input_buf);
   }
 }

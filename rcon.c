@@ -4,21 +4,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "dbg.h"
 #include "socket.h"
 
-#define RCON_TYPE_RESP 0x00
-#define RCON_TYPE_CMD 0x02
-#define RCON_TYPE_AUTH 0x03
+#define RCON_TYPE_RESP 0
+#define RCON_TYPE_CMD 2
+#define RCON_TYPE_AUTH_RESP 2
+#define RCON_TYPE_AUTH 3
 #define RCON_TYPE_EOF 0xdeadbeef
 
-static uint32_t id = 0;
+static uint32_t id = 114514;
 
 ssize_t _rcon_pkt_send(int fd, uint32_t id, uint32_t type, char *payload) {
   size_t len = 4 + 4 + strlen(payload) + 1 + 1;
   char *buf = malloc(4 + len);
   if (!buf) {
     perror("malloc");
-    return NULL;
+    return -1;
   }
   uint32_t *r_len = (uint32_t *)buf;
   uint32_t *r_id = (uint32_t *)(buf + 4);
@@ -58,11 +60,14 @@ char *_rcon_pkt_recv(int fd, uint32_t *id) {
     return NULL;
   }
   *id = le32toh(*(uint32_t *)buf);
-  uint32_t type = le32toh(*(uint32_t *)buf + 4);
-  if (type != RCON_TYPE_RESP) {
+  uint32_t type = le32toh(*(uint32_t *)(buf + 4));
+  if (type != RCON_TYPE_RESP && type != RCON_TYPE_AUTH_RESP) {
     fprintf(stderr, "_rcon_pkt_recv: unexpected packet type %u\n", type);
   }
-  return buf + 8;
+
+  char *payload = strdup(buf + 8);
+  free(buf);
+  return payload;
 }
 
 char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
@@ -73,13 +78,20 @@ char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
     buf = _rcon_pkt_recv(fd, &id);
     if (!buf) return NULL;
     if (id == cmd_id) {
-      ret = realloc(ret, strlen(ret) + strlen(buf) + 1);
-      if (!ret) {
-        perror("realloc");
-        free(buf);
-        return NULL;
+      if (ret) {
+        ret = realloc(ret, strlen(ret) + strlen(buf) + 1);
+        if (!ret) {
+          perror("realloc");
+          free(buf);
+          return NULL;
+        }
+        strcat(ret, buf);
+      } else {
+        ret = strdup(buf);
+        if (!ret) {
+          perror("strdup");
+        }
       }
-      strcat(ret, buf);
     } else if (id != eof_id) {
       fprintf(stderr,
               "_rcon_resp_recv: "
@@ -90,7 +102,6 @@ char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
   } while (id != eof_id);
   return ret;
 }
-
 
 int rcon_exec(int fd, char *cmd) {
   uint32_t cmd_id = id++;
@@ -108,12 +119,16 @@ int rcon_exec(int fd, char *cmd) {
 }
 
 int rcon_auth(int fd, char *password) {
-  uint32_t cmd_id = id++;
-  ssize_t ret = _rcon_pkt_send(fd, cmd_id, RCON_TYPE_AUTH, password);
+  uint32_t auth_id = id++;
+  uint32_t auth_resp_id;
+  ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, password);
   if (ret < 0) return -1;
-  char *resp = _rcon_pkt_recv(fd, &cmd_id);
-  if (!resp) return 0;
-  printf("%s\n", resp);
-  free(resp);
+  char *resp = _rcon_pkt_recv(fd, &auth_resp_id);
+  if (resp) free(resp);
+  if (!resp || auth_resp_id == 0xffffffff) {
+    printf("Authentication failed.\n");
+    return -1;
+  } else
+    printf("Authenticated.\n");
   return 0;
 }

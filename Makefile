@@ -1,4 +1,4 @@
-CFLAGS=-std=gnu99 -I. -O3 -Wall -Wextra
+CFLAGS=-g -std=gnu99 -I. -O3 -Wall -Wextra
 LIBS=-lbestline
 SRC=$(wildcard *.c)
 HDR=$(wildcard *.h)
@@ -16,7 +16,7 @@ nmcrcon: $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 clean:
-	$(RM) -r obj nmcrcon
+	$(RM) -r obj nmcrcon vgcore.*
 
 obj/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

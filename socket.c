@@ -109,7 +109,6 @@ int socket_tryconnect(char *hostname, char *port) {
   }
 
   // loop through all the results and bind to the first we can
-  int yes = 1;
   for (p = servinfo; p != NULL; p = p->ai_next) {
     if ((connfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
       perror("socket");

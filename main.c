@@ -9,8 +9,6 @@
 
 #define MAXDATASIZE 8192
 
-int console(int rconfd) { return 0; }
-
 int main(int argc, char *argv[]) {
   char *host = NULL;
   char *port = NULL;
