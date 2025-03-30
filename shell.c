@@ -31,6 +31,7 @@ void _shell_sigint_hdlr(int sig) { exit_now = 1; }
 int _shell_rcon_auth(int rconfd) {
   char *password = NULL;
   int failed_cnt = 0;
+  int auth_result = -1;
   do {
     if (password) free(password);
     failed_cnt++;
@@ -38,8 +39,8 @@ int _shell_rcon_auth(int rconfd) {
     password = bestline("Password: ");
     bestlineMaskModeDisable();
     if (!password) password = strdup("");
-  } while (rcon_auth(rconfd, password) < 0 && failed_cnt < 3);
-  return -1;
+  } while ((auth_result = rcon_auth(rconfd, password)) < 0 && failed_cnt < 3);
+  return auth_result < 0 ? -1 : 0;
 }
 
 void shell_loop(int rconfd) {
