@@ -1,0 +1,5 @@
+Diagnostics:
+  Includes:
+    IgnoreHeader:
+      - dbg.h
+      - log.h
