@@ -10,6 +10,12 @@
 #define MAXDATASIZE 8192
 
 int main(int argc, char *argv[]) {
+  printf(
+      "Nicholas' Minecraft RCON Client (nmcrcon)\n"
+      "Copyright (C) 2025 Nicholas Wang (https://nicholas.wang)\n"
+      "This program comes with ABSOLUTELY NO WARRANTY;\n"
+      "This is free software, and you are welcome to redistribute it under \n"
+      "certain conditions.\n\n");
   char *host = NULL;
   char *port = NULL;
   if (argc > 1) {
