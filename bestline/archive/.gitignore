@@ -1,0 +1,9 @@
+*.o
+ape.lds
+history.txt
+cosmopolitan.h
+cosmopolitan.a
+bestline_example
+bestline_example.com
+bestline_example.com.dbg
+bestline_multi
