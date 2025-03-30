@@ -56,7 +56,7 @@ void shell_loop(int rconfd) {
   signal(SIGINT, _shell_sigint_hdlr);
   if (_shell_rcon_auth(rconfd) < 0) exit_now = 1;
   char *input_buf;
-  while ((input_buf = bestline("nmcrcon> ")) && !exit_now) {
+  while (!exit_now && (input_buf = bestline("nmcrcon> "))) {
     if (input_buf[0] != '\0') {
       bestlineHistoryAdd(input_buf);
 #if HIST2DISK
@@ -65,10 +65,10 @@ void shell_loop(int rconfd) {
       if (input_buf[0] == '.') {
         if (!strcmp(input_buf, ".exit")) exit_now = 1;
         if (!strcmp(input_buf, ".auth")) {
-          _shell_rcon_auth(rconfd);
+          if (_shell_rcon_auth(rconfd) < 0) exit_now = 1;
         }
       } else {
-        if (rcon_exec(rconfd, input_buf) < 0) exit_now = 1;
+        rcon_exec(rconfd, input_buf);
       }
     }
     if (input_buf) free(input_buf);
