@@ -92,10 +92,14 @@ char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
         }
       }
     } else if (id != eof_id) {
-      fprintf(stderr,
-              "_rcon_resp_recv: "
-              "unexpected packet id %u, expecting cmd:%u or eof: %u\n",
-              id, cmd_id, eof_id);
+      if (id == 0xffffffff) {
+        fprintf(stderr, "You are not authenticated.\n");
+      } else {
+        fprintf(stderr,
+                "_rcon_resp_recv: "
+                "unexpected packet id %u, expecting cmd:%u or eof: %u\n",
+                id, cmd_id, eof_id);
+      }
     }
     free(buf);
   } while (id != eof_id);
