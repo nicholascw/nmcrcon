@@ -91,9 +91,11 @@ static void *_socket_get_in_addr(struct sockaddr *sa) {
   return &(((struct sockaddr_in6 *)sa)->sin6_addr);
 }
 
+#if 0
 static int _socket_set_nonblk(int fd) {
   return fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
 }
+#endif
 
 int socket_tryconnect(char *hostname, char *port) {
   int connfd;
