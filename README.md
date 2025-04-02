@@ -99,16 +99,18 @@ Like Linux shells, `nmcrcon` supports built-in commands and is designed to be ea
 ## Roadmap
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
 
-- **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
-- **Compability with `mcrcon`** - Provide command line options and environment variables that is compatible with `mcrcon`.
-- **Command in arguments** - Allow users to pass commands directly as arguments, similar to `ssh` or `bash -c`.
-- **`man` page** - Create a man page for `nmcrcon`.
-- **Scripting** - Allow users to write scripts using `nmcrcon` commands.
-- **More built-in commands** - to support scripting better, such as `sleep`,`connect`,`disconnect`.
-- **Tab completion** - Add tab completion support.
-- **Customizable prompt** - Allow users to customize the shell prompt.
-- **Configuration** - Support configuration files for persistent settings.
-- **Command history** - Implement command history.
+- [] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
+- [] **Compability with `mcrcon`** - Provide command line options and environment variables that is compatible with `mcrcon`.
+- [] **Command in arguments** - Allow users to pass commands directly as arguments, similar to `ssh` or `bash -c`.
+- [] **`man` page** - Create a man page for `nmcrcon`.
+- [] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
+- [] **Tab completion** - Add tab completion support.
+- [] **Customizable prompt** - Allow users to customize the shell prompt.
+- [] **Configuration** - Support configuration files for persistent settings.
+- [] **Command history** - Implement command history.
+- [] **Scripting** - Allow users to write scripts using `nmcrcon` commands.
+
+Versioning or releases may come by the time about half of these are crossed off, but I'm not sure yet. I may also work on a potential pre-built executable distribution with GitHub Actions, as well as potential Windows / macOS binaries, at some point.
 
 ## Issues
 You may report any bugs or feature requests by creating an issue on [GitHub Issues](https://github.com/nicholascw/nmcrcon/issues/new) and I would be happy to help with troubleshooing. However, be fully aware that **`nmcrcon` is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.**
