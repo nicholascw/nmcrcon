@@ -87,14 +87,12 @@ CTRL-Z         SUSPEND PROCESS
 #### Built-in Commands
 
 Like Linux shells, `nmcrcon` supports built-in commands and is designed to be easily expandable. Below is the exhaustive list of all built-in commands for the current version, and may expand in future versions. Note that built-in commands has a higher priority than RCON commands in case of a conflict. 
-<details>
-<summary>Built-in Commands</summary>
+
 | Command | Description                           |
-| ------- | ------------------------------------- |
+| :-----: | :------------------------------------ |
 | `auth`  | Re-invoke the authentication process. |
 | `clear` | Clears the screen.                    |
 | `exit`  | Exits the `nmcrcon` shell.            |
-</details>
 
 ## Roadmap
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
