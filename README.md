@@ -2,7 +2,7 @@
 Yet another Minecraft RCON client that tries to go somewhere<sup>[1](https://github.com/Tiiffi/mcrcon/issues/45#issuecomment-997283909) [2](https://github.com/Tiiffi/mcrcon/issues/58)</sup>.
 
 ## Overview
-This is just my overnight attempt of recreating the mcrcon client from scratch after investigating `Tiiffi/mcrcon` for some minutes and deteremined a pull request may be much more work than just starting from scratch. I am doing this with the goal of making a usable one that will never have the invalid packet size issue that `Tiiffi/mcrcon` had for years, and also get rid of the weird design decisions such as having to enter the password in the command line when invoking it, unable to use the arrow keys when editing, etc.
+This is just my overnight attempt of recreating the mcrcon client from scratch after investigating [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) for some minutes and deteremined a pull request may be much more work than just starting from scratch. I am doing this with the goal of making a usable one that will never have the invalid packet size issue that [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) had for years, and also get rid of the weird design decisions such as having to enter the password in the command line when invoking it, unable to use the arrow keys when editing, etc.
 
 **This project is in early development. Contributions over PRs are welcome.**
 
@@ -98,7 +98,7 @@ Like Linux shells, `nmcrcon` supports built-in commands and is designed to be ea
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
 
 - [ ] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
-- [ ] **Compability with `mcrcon`** - Provide command line options and environment variables that is compatible with `mcrcon`.
+- [ ] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
 - [ ] **Command in arguments** - Allow users to pass commands directly as arguments, similar to `ssh` or `bash -c`.
 - [ ] **`man` page** - Create a man page for `nmcrcon`.
 - [ ] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
