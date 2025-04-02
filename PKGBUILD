@@ -3,7 +3,7 @@
 pkgname=nmcrcon-git
 pkgver=r12.0eb27a4
 pkgrel=3
-pkgdesc=" Yet another Minecraft RCON client that isn't against humanity and actually works."
+pkgdesc="Yet another Minecraft RCON client that isn't against humanity and actually works."
 url="https://github.com/nicholascw/nmcrcon"
 arch=('any')
 license=('GPL-3.0-only')
