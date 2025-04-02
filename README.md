@@ -111,7 +111,7 @@ I have a list of plans in case I have time and interest to continue investing in
 - **Command history** - Implement command history.
 
 ## Issues
-You may report any bugs or feature requests by creating an issue on GitHub: [GitHub Issues](https://github.com/nicholascw/nmcrcon/issues/new)
+You may report any bugs or feature requests by creating an issue on [GitHub Issues](https://github.com/nicholascw/nmcrcon/issues/new) and I would be happy to help with troubleshooing. However, be fully aware that **`nmcrcon` is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.**
 
 ## Contributing
 If you're interested in contributing to `nmcrcon`, feel free to fork the repository and submit a pull request. Please make sure to follow the existing code style and add appropriate tests for any new features or bug fixes.
