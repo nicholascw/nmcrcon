@@ -43,7 +43,11 @@ char *_rcon_pkt_recv(int fd, uint32_t *id) {
   uint32_t len;
   ssize_t ret = recv_numbytes(fd, &len, sizeof(len));
   if (ret != sizeof(len)) {
-    perror("recv");
+    if (ret <= 0) {
+      perror("recv");
+    } else {
+      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n", sizeof(len), ret);
+    }
     return NULL;
   }
   len = le32toh(len);
@@ -54,8 +58,12 @@ char *_rcon_pkt_recv(int fd, uint32_t *id) {
   }
   ret = recv_numbytes(fd, buf, len);
   if (ret != len) {
+    if (ret <= 0) {
+      perror("recv");
+    } else {
+      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n", sizeof(len), ret);
+    }
     free(buf);
-    perror("recv");
     return NULL;
   }
   *id = le32toh(*(uint32_t *)buf);
