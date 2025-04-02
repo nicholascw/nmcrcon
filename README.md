@@ -26,13 +26,15 @@ For now, `nmcrcon` has no configuration file, no envrionment variables, and no c
 $ nmcrcon
 $ nmcrcon 123.123.123.123
 $ nmcrcon 123.123.123.123:25576
+$ nmcrcon mc.example.com
+$ nmcrcon mc.example.com:25576
 ```
 
 Above invocation would likely remain fully unchanged, but be aware of the future plans that may change the way `nmcrcon` treats command line arguments. Refer to [Roadmap](#roadmap) for more details.
 
 #### The console shortcuts
 
-As `nmcrcon` is built with [jart/bestline](https://github.com/jart/bestline), it brings you a better console experience with shortcuts support. See a full list of shortcuts supported listed below grabbed from `bestline`'s README. **For now, `nmcrcon` exits on Ctrl-C and Ctrl-D, but I'm planning to alter Ctrl-C's behavior to do nothing, mimicking what you would experience with an everyday Linux shell.**
+As `nmcrcon` is built with [jart/bestline](https://github.com/jart/bestline), it brings you a better console experience with shortcuts support. See a full list of shortcuts supported listed below grabbed from `bestline`'s README.
 
 <details>
 <summary>Shortcuts</summary>
@@ -72,7 +74,6 @@ ALT-T          TRANSPOSE WORD
 ALT-U          UPPERCASE WORD
 ALT-L          LOWERCASE WORD
 ALT-C          CAPITALIZE WORD
-CTRL-C         INTERRUPT PROCESS
 CTRL-Z         SUSPEND PROCESS
 CTRL-\         QUIT PROCESS
 CTRL-S         PAUSE OUTPUT
