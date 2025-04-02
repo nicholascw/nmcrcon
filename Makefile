@@ -16,7 +16,7 @@ nmcrcon: obj $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
 
 clean:
-	$(RM) -r obj nmcrcon vgcore.*
+	$(RM) -r obj nmcrcon vgcore.* callgrind.out.*
 
 obj/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

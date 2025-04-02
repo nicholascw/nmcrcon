@@ -1,4 +1,7 @@
+#include <errno.h>
 #include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -49,11 +52,6 @@ int _shell_builtin(int rconfd, const char *input) {
   return ret;
 }
 
-void _shell_sigint_hdlr(int sig) {
-  (void)(sig);
-  return;
-}
-
 int shell_rcon_auth(int rconfd) {
   char *password = NULL;
   int failed_cnt = 0;
@@ -77,6 +75,11 @@ int shell_rcon_auth(int rconfd) {
   return auth_result < 0 ? -1 : 0;
 }
 
+static bool gotint = false;
+void _shell_sigint_handler(int signum) {
+  if (signum == SIGINT) gotint = true;
+}
+
 void shell_loop(int rconfd) {
 #if HINTS_IMPL
   /* Set the completion callback. This will be called every time the
@@ -89,8 +92,24 @@ void shell_loop(int rconfd) {
 #endif
   if (shell_rcon_auth(rconfd) < 0) return;
   char *input_buf;
-  signal(SIGINT, _shell_sigint_hdlr);  // TODO: investigate bestline
-  while ((input_buf = bestline("nmcrcon> "))) {
+  // ignore SIGINT
+  struct sigaction sa;
+  sa.sa_handler = &_shell_sigint_handler;
+  sa.sa_flags = 0;
+  sigemptyset(&sa.sa_mask);
+  sigaction(SIGINT, &sa, 0);
+
+  while (1) {
+    gotint = false;
+    input_buf = bestline("nmcrcon> ");
+    if (!input_buf) {
+      // Ctrl-D or Ctrl-C.
+      if (gotint) {
+        putchar('\n');
+        continue;
+      }
+      break;
+    }
     if (input_buf[0] == '\0') {
       free(input_buf);
       continue;

@@ -3909,9 +3909,7 @@ void bestlineFreeCompletions(bestlineCompletions *lc) {
  *
  * @see bestlineMaskModeDisable()
  */
-void bestlineMaskModeEnable(void) {
-  maskmode = 1;
-}
+void bestlineMaskModeEnable(void) { maskmode = 1; }
 
 /**
  * Disables "mask mode".

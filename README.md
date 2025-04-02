@@ -97,7 +97,7 @@ Like Linux shells, `nmcrcon` supports built-in commands and is designed to be ea
 ## Roadmap
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
 
-- [ ] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
+- [x] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
 - [ ] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
 - [ ] **Command in arguments** - Allow users to pass commands directly as arguments, similar to `ssh` or `bash -c`.
 - [ ] **`man` page** - Create a man page for `nmcrcon`.
