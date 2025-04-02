@@ -22,7 +22,6 @@ pkgver () {
 
 build () {
   cd "$srcdir/nmcrcon"
-  mkdir -p obj
   make nmcrcon
 }
 
