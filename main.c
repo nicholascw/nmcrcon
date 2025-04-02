@@ -44,8 +44,7 @@ print_usage:
   if (host) free(host);
   if (port) free(port);
   printf(
-      "\n    Nicholas' Minecraft RCON Client (nmcrcon): yet another Minecraft "
-      "RCON client that isn't against humanity and actually works.\n"
+      "\n    Nicholas' Minecraft RCON Client (nmcrcon)\n"
       "    Copyright (C) 2025 Nicholas Wang <me@nicho1as.wang>\n"
       "\n"
       "    This program is free software: you can redistribute it and/or "

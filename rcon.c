@@ -12,18 +12,18 @@
 #define RCON_TYPE_AUTH 3
 #define RCON_TYPE_EOF 0xdeadbeef
 
-static uint32_t id = 114514;
+static int32_t id = 114514;
 
-ssize_t _rcon_pkt_send(int fd, uint32_t id, uint32_t type, char *payload) {
+ssize_t _rcon_pkt_send(int fd, int32_t id, int32_t type, char *payload) {
   size_t len = 4 + 4 + strlen(payload) + 1 + 1;
   char *buf = malloc(4 + len);
   if (!buf) {
     perror("malloc");
     return -1;
   }
-  uint32_t *r_len = (uint32_t *)buf;
-  uint32_t *r_id = (uint32_t *)(buf + 4);
-  uint32_t *r_type = (uint32_t *)(buf + 8);
+  int32_t *r_len = (int32_t *)buf;
+  int32_t *r_id = (int32_t *)(buf + 4);
+  int32_t *r_type = (int32_t *)(buf + 8);
   *r_len = htole32(len);
   *r_id = htole32(id);
   *r_type = htole32(type);
@@ -39,14 +39,15 @@ ssize_t _rcon_pkt_send(int fd, uint32_t id, uint32_t type, char *payload) {
   return ret;
 }
 
-char *_rcon_pkt_recv(int fd, uint32_t *id) {
-  uint32_t len;
+char *_rcon_pkt_recv(int fd, int32_t *id) {
+  int32_t len;
   ssize_t ret = recv_numbytes(fd, &len, sizeof(len));
   if (ret != sizeof(len)) {
     if (ret <= 0) {
       perror("recv");
     } else {
-      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n", sizeof(len), ret);
+      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n",
+              sizeof(len), ret);
     }
     return NULL;
   }
@@ -61,13 +62,14 @@ char *_rcon_pkt_recv(int fd, uint32_t *id) {
     if (ret <= 0) {
       perror("recv");
     } else {
-      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n", sizeof(len), ret);
+      fprintf(stderr, "recv_numbytes: expected %zu bytes, got %zd\n",
+              sizeof(len), ret);
     }
     free(buf);
     return NULL;
   }
-  *id = le32toh(*(uint32_t *)buf);
-  uint32_t type = le32toh(*(uint32_t *)(buf + 4));
+  *id = le32toh(*(int32_t *)buf);
+  int32_t type = le32toh(*(int32_t *)(buf + 4));
   if (type != RCON_TYPE_RESP && type != RCON_TYPE_AUTH_RESP) {
     fprintf(stderr, "_rcon_pkt_recv: unexpected packet type %u\n", type);
   }
@@ -77,10 +79,10 @@ char *_rcon_pkt_recv(int fd, uint32_t *id) {
   return payload;
 }
 
-char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
+char *_rcon_resp_recv(int fd, int32_t cmd_id, int32_t eof_id) {
   char *buf;
   char *ret = NULL;
-  uint32_t id;
+  int32_t id;
   do {
     buf = _rcon_pkt_recv(fd, &id);
     if (!buf) return NULL;
@@ -100,7 +102,7 @@ char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
         }
       }
     } else if (id != eof_id) {
-      if (id == 0xffffffff) {
+      if (id == -1) {
         fprintf(stderr, "You are not authenticated.\n");
       } else {
         fprintf(stderr,
@@ -115,8 +117,8 @@ char *_rcon_resp_recv(int fd, uint32_t cmd_id, uint32_t eof_id) {
 }
 
 int rcon_exec(int fd, char *cmd) {
-  uint32_t cmd_id = id++;
-  uint32_t eof_id = id++;
+  int32_t cmd_id = id++;
+  int32_t eof_id = id++;
   ssize_t ret = _rcon_pkt_send(fd, cmd_id, RCON_TYPE_CMD, cmd);
   if (ret < 0) return -1;
   id += 1;
@@ -130,13 +132,13 @@ int rcon_exec(int fd, char *cmd) {
 }
 
 int rcon_auth(int fd, char *password) {
-  uint32_t auth_id = id++;
-  uint32_t auth_resp_id;
+  int32_t auth_id = id++;
+  int32_t auth_resp_id;
   ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, password);
   if (ret < 0) return -1;
   char *resp = _rcon_pkt_recv(fd, &auth_resp_id);
   if (resp) free(resp);
-  if (!resp || auth_resp_id == 0xffffffff) {
+  if (!resp || auth_resp_id == -1) {
     printf("Authentication failed.\n");
     return -1;
   } else
