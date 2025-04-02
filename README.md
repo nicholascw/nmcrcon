@@ -7,16 +7,16 @@ This is just my overnight attempt of recreating the mcrcon client from scratch a
 **This project is in early development. Contributions over PRs are welcome.**
 
 ## Build
-### Arch Linux
+#### Arch Linux
 There is `PKGBUILD` supplied in this repository as well as in AUR.
 
-### Other Linux distros
+#### Other Linux distros
 You can use the provided `Makefile` to build `nmcrcon`. Note that you have to install `libbestline` for your system. Build `nmcrcon` simply with `make`.
 
-### Windows, macOS, *BSD, etc.
+#### Windows, macOS, *BSD, etc.
 As it's just an overnight effort, for now, I don't know. The current compatibility guarantee is not higher than "works on my machine" but I will try to help. Try by yourself and let me know if it works or not. Windows users can simply use WSL or try build with Cygwin.
 
-### Usage
+## Usage
 
 #### Invocation
 
