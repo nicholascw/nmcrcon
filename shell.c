@@ -1,9 +1,9 @@
-#include <bestline.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+#include "bestline.h"
 #include "builtin_cmds.h"
 #include "rcon.h"
 #define HINTS_IMPL 0  // from example.c, TODO
@@ -89,7 +89,7 @@ void shell_loop(int rconfd) {
 #endif
   if (shell_rcon_auth(rconfd) < 0) return;
   char *input_buf;
-  signal(SIGINT, _shell_sigint_hdlr); // TODO: investigate bestline
+  signal(SIGINT, _shell_sigint_hdlr);  // TODO: investigate bestline
   while ((input_buf = bestline("nmcrcon> "))) {
     if (input_buf[0] == '\0') {
       free(input_buf);
