@@ -8,7 +8,7 @@ This is just my overnight attempt of recreating the mcrcon client from scratch a
 
 ## Build
 #### Arch Linux
-There is `PKGBUILD` supplied in this repository as well as in [AUR](https://aur.archlinux.org/packages/nmcrcon-git).
+There is `PKGBUILD` supplied in this repository as well as in AUR.
 
 #### Other Linux distros
 You can use the provided `Makefile` to build `nmcrcon`. Note that you have to install `libbestline` for your system. Build `nmcrcon` simply with `make`.
