@@ -2,13 +2,13 @@
 Yet another Minecraft RCON client that tries to go somewhere<sup>[1](https://github.com/Tiiffi/mcrcon/issues/45#issuecomment-997283909) [2](https://github.com/Tiiffi/mcrcon/issues/58)</sup>.
 
 ## Overview
-This is just my overnight attempt of recreating the mcrcon client from scratch after investigating [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) for some minutes and deteremined a pull request may be much more work than just starting from scratch. I am doing this with the goal of making a usable one that will never have the invalid packet size issue that [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) had for years, and also get rid of the weird design decisions such as having to enter the password in the command line when invoking it, unable to use the arrow keys when editing, etc.
+This is just my overnight attempt of recreating the mcrcon client from scratch after investigating [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) for some minutes and deteremined a pull request may be much more work than just starting from scratch. I am doing this with the goal of making a usable one that will never have the invalid packet size issue that [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon) had for years, and also get rid of the weird design decisions such as must enter the password in the command line when invoking it, unable to use the arrow keys when editing, etc.
 
 **This project is in early development. Contributions over PRs are welcome.**
 
 ## Build
 #### Arch Linux
-There is `PKGBUILD` supplied in this repository as well as in [AUR](https://aur.archlinux.org/packages/nmcrcon-git).
+There is `PKGBUILD` supplied in this repository as well as in AUR.
 
 #### Other Linux distros
 You can use the provided `Makefile` to build `nmcrcon`. Note that you have to install `libbestline` for your system. Build `nmcrcon` simply with `make`.
@@ -100,14 +100,13 @@ I have a list of plans in case I have time and interest to continue investing in
 
 - [x] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
 - [ ] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
-- [ ] **Command in arguments** - Allow users to pass commands directly as arguments, similar to `ssh` or `bash -c`.
-- [ ] **`man` page** - Create a man page for `nmcrcon`.
-- [ ] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
-- [ ] **Tab completion** - Add tab completion support.
-- [ ] **Customizable prompt** - Allow users to customize the shell prompt.
 - [ ] **Configuration** - Support configuration files for persistent settings.
+- [ ] **Customizable prompt** - Allow users to customize the shell prompt.
 - [ ] **Command history** - Implement command history.
+- [ ] **Tab completion** - Add tab completion support.
+- [ ] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
 - [ ] **Scripting** - Allow users to write scripts using `nmcrcon` commands.
+- [ ] **`man` page** - Create a man page for `nmcrcon`.
 
 Versioning or releases may come by the time about half of these are ticked, but I'm not sure yet. I may also work on a potential pre-built executable distribution with GitHub Actions, as well as potential Windows / macOS binaries, at some point.
 
