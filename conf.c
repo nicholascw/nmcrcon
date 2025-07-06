@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #ifdef __GNUC__
-#define __CC__ "GCC "__VERSION__
+#define __CC__ "GCC " __VERSION__
 #else
 #define __CC__ __VERSION__
 #endif
@@ -12,7 +12,8 @@
 #ifdef NMCRCON_VERSION
 const char *argp_program_version = NMCRCON_VERSION;
 #else
-const char *argp_program_version = "nmcrcon (custom build, "__DATE__" "__TIME__", "__CC__")";
+const char *argp_program_version =
+    "nmcrcon (custom build, " __DATE__ " " __TIME__ ", " __CC__ ")";
 #endif
 
 const char *argp_program_bug_address =
@@ -26,10 +27,8 @@ static char doc[] =
 
 static char args_doc[] = "[HOST[:PORT]] [COMMAND]";
 
-/* Keys for options without short-options. */
-#define OPT_ABORT 1 /* –abort */
+#define OPT_ABORT 1
 
-/* The options we understand. */
 static struct argp_option options[] = {
     {"host", 'H', "HOST", 0, "server host"},
     {"port", 'P', "PORT", 0, "server port"},
@@ -38,20 +37,16 @@ static struct argp_option options[] = {
     {"wait", 'w', "SECONDS", 0, "Wait duration in between each command"},
     {0}};
 
-/* Used by main to communicate with parse_opt. */
 struct arguments {
-  char *hostport;                 /* arg1 */
-  char **cmds;             /* [string…] */
+  char *hostport;
+  char **cmds;
   char *host;
   char *port;
   char *password;
   float wait_sec;
 };
 
-/* Parse a single option. */
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
-  /* Get the input argument from argp_parse, which we
-     know is a pointer to our arguments structure. */
   struct arguments *arguments = state->input;
 
   switch (key) {
@@ -65,7 +60,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     case 'r':
       break;
     case ARGP_KEY_NO_ARGS:
-      return 0;
+      argp_usage(state);
     case ARGP_KEY_ARG:
       /* Here we know that state->arg_num == 0, since we
          force argument parsing to end before any more arguments can
