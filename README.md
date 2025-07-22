@@ -8,7 +8,7 @@ This is just my overnight attempt of recreating the mcrcon client from scratch a
 
 ## Build
 #### Arch Linux
-There is `PKGBUILD` supplied in this repository as well as in AUR.
+There is `PKGBUILD` supplied in this repository as well as in [AUR](https://aur.archlinux.org/packages/nmcrcon-git).
 
 #### Other Linux distros
 You can use the provided `Makefile` to build `nmcrcon`. Note that you have to install `libbestline` for your system. Build `nmcrcon` simply with `make`.
@@ -20,7 +20,32 @@ As it's just an overnight effort, for now, I don't know. The current compatibili
 
 #### Invocation
 
-For now, `nmcrcon` has no configuration file, no envrionment variables, and no command line options. The only command line arguments it takes is "`[SERVER_ADDRESS:[RCON_PORT]]`" which is also optional. If you don't provide the server address or the RCON port, it defaults to `localhost` and `25575`. See examples below:
+```
+Usage: nmcrcon [OPTION...] [HOST[:PORT]] [COMMAND]
+
+  -H, --host=HOST            Server host
+  -p, --pass=PASSWORD        RCON Password
+  -P, --port=PORT            Server port
+  -q, -s, --quiet, --silent  Don't produce any output
+  -v, --verbose              Output more information
+  -w, --wait=SECONDS         Wait duration in between each command
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+  -V, --version              Print program version
+
+Mandatory or optional arguments to long options are also mandatory or optional
+for any corresponding short options.
+
+You may also specify server host, port, and password in environment variables
+(N)MCRCON_HOST, (N)MCRCON_PORT, (N)MCRCON_PASS. Please note the NMCRCON_
+variables would have higher priorities than MCRCON_ ones.
+```
+
+
+<details>
+<summary>Early Version</summary>
+
+~~For now~~, `nmcrcon` has no configuration file, no envrionment variables, and no command line options. The only command line arguments it takes is "`[SERVER_ADDRESS:[RCON_PORT]]`" which is also optional. If you don't provide the server address or the RCON port, it defaults to `localhost` and `25575`. See examples below:
 
 ```
 $ nmcrcon
@@ -31,6 +56,8 @@ $ nmcrcon mc.example.com:25576
 ```
 
 Above invocation would likely remain fully unchanged, but be aware of the future plans that may change the way `nmcrcon` treats command line arguments. Refer to [Roadmap](#roadmap) for more details.
+
+</details>
 
 #### The console shortcuts
 
