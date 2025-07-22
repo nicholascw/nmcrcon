@@ -20,6 +20,8 @@ As it's just an overnight effort, for now, I don't know. The current compatibili
 
 #### Invocation
 
+Current version of `nmcrcon` supports the following options:
+
 ```
 Usage: nmcrcon [OPTION...] [HOST[:PORT]] [COMMAND]
 
@@ -32,18 +34,24 @@ Usage: nmcrcon [OPTION...] [HOST[:PORT]] [COMMAND]
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -V, --version              Print program version
-
-Mandatory or optional arguments to long options are also mandatory or optional
-for any corresponding short options.
-
-You may also specify server host, port, and password in environment variables
-(N)MCRCON_HOST, (N)MCRCON_PORT, (N)MCRCON_PASS. Please note the NMCRCON_
-variables would have higher priorities than MCRCON_ ones.
 ```
 
+However, the `[COMMAND]` and the following options has not been implemented yet:
+
+```
+  -q, -s, --quiet, --silent  Don't produce any output
+  -v, --verbose              Output more information
+  -w, --wait=SECONDS         Wait duration in between each command
+```
+
+Current version of `nmcrcon` is still fully compatible with the early version invocation, but `-H` and `-P` must not present. They would have a higher priority than `[HOST[:PORT]]` so that `[COMMAND]` without host or port specified in `[HOST[:PORT]]` can be correctly supported.
 
 <details>
-<summary>Early Version</summary>
+<summary>Early Version Invocation</summary>
+
+#### Environment Variables
+
+You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon. **Please note that while the `NMCRCON_` variables would have higher priorities than `MCRCON_` ones, using `NMCRCON_` variables does not automatically mute other `MCRCON_` variables, so a mixed use of `NMCRCON_` and `MCRCON_` variables is also possible.**
 
 ~~For now~~, `nmcrcon` has no configuration file, no envrionment variables, and no command line options. The only command line arguments it takes is "`[SERVER_ADDRESS:[RCON_PORT]]`" which is also optional. If you don't provide the server address or the RCON port, it defaults to `localhost` and `25575`. See examples below:
 
@@ -126,7 +134,7 @@ Like Linux shells, `nmcrcon` supports built-in commands and is designed to be ea
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
 
 - [x] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
-- [ ] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
+- [x] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
 - [ ] **Configuration** - Support configuration files for persistent settings.
 - [ ] **Customizable prompt** - Allow users to customize the shell prompt.
 - [ ] **Command history** - Implement command history.
