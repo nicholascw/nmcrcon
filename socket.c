@@ -120,7 +120,6 @@ int socket_tryconnect(char *hostname, char *port) {
 
   freeaddrinfo(servinfo);
   if (!p) {
-    fprintf(stderr, "Failed to connect.\n");
     return -1;
   }
   return connfd;

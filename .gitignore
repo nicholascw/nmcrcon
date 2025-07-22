@@ -2,3 +2,4 @@ obj/*
 nmcrcon
 vgcore.*
 callgrind.out.*
+.vscode/*
