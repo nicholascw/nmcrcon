@@ -8,6 +8,7 @@
 
 #include "bestline.h"
 #include "builtin_cmds.h"
+#include "conf.h"
 #include "rcon.h"
 #define HINTS_IMPL 0  // from example.c, TODO
 #define HIST2DISK 0   // TODO
@@ -53,9 +54,9 @@ int _shell_builtin(int rconfd, const char *input) {
 }
 
 int shell_rcon_auth(int rconfd) {
+  int auth_result = -1;
   char *password = NULL;
   int failed_cnt = 0;
-  int auth_result = -1;
   do {
     if (password) {
       memset(password, '\0', strlen(password));
@@ -90,7 +91,12 @@ void shell_loop(int rconfd) {
   bestlineHistoryLoad("history.txt");
 #endif
 #endif
-  if (shell_rcon_auth(rconfd) < 0) return;
+  int auth_result = -1;
+  if (nmcrcon_state.password) {
+    auth_result = rcon_auth(rconfd, nmcrcon_state.password);
+  }
+  if (auth_result < 0) auth_result = shell_rcon_auth(rconfd);
+  if (auth_result < 0) return;
   char *input_buf;
   // ignore SIGINT
   struct sigaction sa;
