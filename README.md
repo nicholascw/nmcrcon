@@ -49,11 +49,7 @@ Current version of `nmcrcon` is still fully compatible with the early version in
 <details>
 <summary>Early Version Invocation</summary>
 
-#### Environment Variables
-
-You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon. **Please note that while the `NMCRCON_` variables would have higher priorities than `MCRCON_` ones, using `NMCRCON_` variables does not automatically mute other `MCRCON_` variables, so a mixed use of `NMCRCON_` and `MCRCON_` variables is also possible.**
-
-~~For now~~, `nmcrcon` has no configuration file, no envrionment variables, and no command line options. The only command line arguments it takes is "`[SERVER_ADDRESS:[RCON_PORT]]`" which is also optional. If you don't provide the server address or the RCON port, it defaults to `localhost` and `25575`. See examples below:
+Prior to the introduction of `Argp`, `nmcrcon` has no configuration file, no envrionment variables, and no command line options. The only command line arguments it takes is "`[SERVER_ADDRESS:[RCON_PORT]]`" which is also optional. If you don't provide the server address or the RCON port, it defaults to `localhost` and `25575`. See examples below:
 
 ```
 $ nmcrcon
@@ -66,6 +62,11 @@ $ nmcrcon mc.example.com:25576
 Above invocation would likely remain fully unchanged, but be aware of the future plans that may change the way `nmcrcon` treats command line arguments. Refer to [Roadmap](#roadmap) for more details.
 
 </details>
+
+#### Environment Variables
+
+You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon. **Please note that while the `NMCRCON_` variables would have higher priorities than `MCRCON_` ones, using `NMCRCON_` variables does not automatically mute other `MCRCON_` variables, so a mixed use of `NMCRCON_` and `MCRCON_` variables is also possible.**
+
 
 #### The console shortcuts
 
