@@ -97,7 +97,7 @@ int socket_tryconnect(char *hostname, char *port) {
 
   if ((rv = getaddrinfo(hostname, port, &hints, &servinfo)) != 0) {
     fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
-    return 1;
+    return -1;
   }
 
   // loop through all the results and bind to the first we can
