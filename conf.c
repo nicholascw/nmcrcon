@@ -95,7 +95,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     case ARGP_KEY_FINI:
       return 0;
     default:
-      dbg(key);
       argp_usage(state);
       return ARGP_ERR_UNKNOWN;
   }
@@ -110,12 +109,15 @@ int conf_init_state(int argc, char *argv[]) {
   if (argc > 1) {
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
   }
+
   if (arguments.host || arguments.port) {
     // host and/or port aleady explicitly specified, so hostport is actually
     // part of cmds
-    arguments.cmds_v--;
-    arguments.cmds_c++;
-    arguments.hostport = 0;
+    if (arguments.hostport) {
+      arguments.hostport = 0;
+      arguments.cmds_v--;
+      arguments.cmds_c++;
+    }
   } else {
     if (arguments.hostport) {
       // fill hostport into host & port
