@@ -1,4 +1,4 @@
-CFLAGS=-std=gnu99 -I. -O3 -Wall -Wextra
+CFLAGS=-std=gnu99 -I. -O3 -Wall -Wextra -Wno-missing-field-initializers
 LIBS=
 SRC=$(wildcard *.c)
 HDR=$(wildcard *.h)
