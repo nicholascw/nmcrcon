@@ -15,7 +15,12 @@
 static int32_t id = 114514;
 
 ssize_t _rcon_pkt_send(int fd, int32_t id, int32_t type, char *payload) {
-  size_t len = 4 + 4 + strlen(payload) + 1 + 1;
+  size_t plen = strlen(payload);
+  if (plen > SIZE_MAX - 14) {
+    fprintf(stderr, "_rcon_pkt_send: payload too large (%zu bytes)\n", plen);
+    return -1;
+  }
+  size_t len = 4 + 4 + plen + 1 + 1;
   char *buf = malloc(4 + len);
   if (!buf) {
     perror("malloc");

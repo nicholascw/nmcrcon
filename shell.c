@@ -41,7 +41,10 @@ int _shell_builtin(int rconfd, const char *input) {
   } else {
     in_cmd = strdup(input);
   }
-  if (!in_cmd) return -1;
+  if (!in_cmd) {
+    fprintf(stderr, "_shell_builtin: strdup failed\n");
+    return -1;
+  }
   for (size_t i = 0; i < NUM_OF_CMD_HANDLERS; i++) {
     if (!strcmp(in_cmd, cmds[i].cmd)) {
       ret = cmds[i].func(rconfd, input);
