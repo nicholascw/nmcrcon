@@ -2,6 +2,7 @@ typedef struct __nmcrcon_state {
   char *host;
   char *port;
   char *password;
+  char *history_path;
   float wait_sec;
   int verbose;
   int silent;

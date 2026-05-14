@@ -10,7 +10,6 @@
 #include "conf.h"
 #include "rcon.h"
 #define HINTS_IMPL 0  // from example.c, TODO
-#define HIST2DISK 0   // TODO
 
 #if HINTS_IMPL
 void completion(const char *buf, int pos, bestlineCompletions *lc) {
@@ -85,14 +84,12 @@ void _shell_sigint_handler(int signum) {
 
 void shell_loop(int rconfd) {
 #if HINTS_IMPL
-  /* Set the completion callback. This will be called every time the
-   * user uses the <tab> key. */
   bestlineSetCompletionCallback(completion);
   bestlineSetHintsCallback(hints);
-#if HIST2DISK
-  bestlineHistoryLoad("history.txt");
 #endif
-#endif
+
+  if (nmcrcon_state.history_path)
+    bestlineHistoryLoad(nmcrcon_state.history_path);
   int auth_result = -1;
   if (nmcrcon_state.password) {
     auth_result = rcon_auth(rconfd, nmcrcon_state.password);
@@ -123,9 +120,8 @@ void shell_loop(int rconfd) {
       continue;
     }
     bestlineHistoryAdd(input_buf);
-#if HIST2DISK
-    bestlineHistorySave("history.txt");
-#endif
+    if (nmcrcon_state.history_path)
+      bestlineHistorySave(nmcrcon_state.history_path);
     int builtin_ret = _shell_builtin(rconfd, input_buf);
     if (!builtin_ret) rcon_exec(rconfd, input_buf);
     if (builtin_ret < 0) break;

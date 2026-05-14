@@ -179,6 +179,16 @@ int conf_init_state(int argc, char *argv[]) {
   } else {
     nmcrcon_state.password = NULL;
   }
+  const char *history_env = getenv("NMCRCON_HISTORY");
+  if (history_env) {
+    nmcrcon_state.history_path = strdup(history_env);
+    if (!nmcrcon_state.history_path) {
+      perror("strdup(history_path)");
+      exit(1);
+    }
+  } else {
+    nmcrcon_state.history_path = NULL;
+  }
   nmcrcon_state.wait_sec = arguments.wait_sec;
   nmcrcon_state.verbose = arguments.verbose;
   nmcrcon_state.silent = arguments.silent;
