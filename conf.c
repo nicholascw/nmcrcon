@@ -125,7 +125,11 @@ int conf_init_state(int argc, char *argv[]) {
 
       char *sp = strrchr(arguments.hostport, ':');
       char *test_ipv6 = strrchr(arguments.hostport, ']');
-      if (sp && test_ipv6 < sp) {
+      if (test_ipv6 && strchr(arguments.hostport, '[')) {
+        arguments.host = strchr(arguments.hostport, '[') + 1;
+        *test_ipv6 = '\0';
+      }
+      if (sp && test_ipv6 < sp && strchr(arguments.hostport, ':') == sp) {
         arguments.port = sp + 1;
         *sp = '\0';
       }
