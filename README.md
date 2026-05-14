@@ -65,7 +65,9 @@ Above invocation would likely remain fully unchanged, but be aware of the future
 
 #### Environment Variables
 
-You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon. **Please note that while the `NMCRCON_` variables would have higher priorities than `MCRCON_` ones, using `NMCRCON_` variables does not automatically mute other `MCRCON_` variables, so a mixed use of `NMCRCON_` and `MCRCON_` variables is also possible.**
+You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon.
+
+Command history is persisted to disk when `NMCRCON_HISTORY` is set to a file path. History is automatically loaded on startup and saved after each command.
 
 
 #### The console shortcuts
@@ -138,7 +140,7 @@ I have a list of plans in case I have time and interest to continue investing in
 - [x] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
 - [ ] **Configuration** - Support configuration files for persistent settings.
 - [ ] **Customizable prompt** - Allow users to customize the shell prompt.
-- [ ] **Command history** - Implement command history.
+- [x] **Command history** - Implemented via `NMCRCON_HISTORY` environment variable.
 - [ ] **Tab completion** - Add tab completion support.
 - [ ] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
 - [ ] **Scripting** - Allow users to write scripts using `nmcrcon` commands.
