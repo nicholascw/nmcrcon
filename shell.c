@@ -106,7 +106,7 @@ void shell_loop(int rconfd) {
 
   while (1) {
     gotint = false;
-    input_buf = bestline("nmcrcon> ");
+    input_buf = bestline(nmcrcon_state.prompt);
     if (!input_buf) {
       // Ctrl-D or Ctrl-C.
       if (gotint) {

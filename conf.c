@@ -188,6 +188,12 @@ int conf_init_state(int argc, char *argv[]) {
     }
   } else {
     nmcrcon_state.history_path = NULL;
+    const char *ps1 = getenv("NMCRCON_PS1");
+    nmcrcon_state.prompt = strdup(ps1 ? ps1 : "nmcrcon> ");
+    if (!nmcrcon_state.prompt) {
+      perror("strdup(prompt)");
+      exit(1);
+    }
   }
   nmcrcon_state.wait_sec = arguments.wait_sec;
   nmcrcon_state.verbose = arguments.verbose;
