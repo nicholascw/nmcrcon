@@ -65,7 +65,7 @@ Above invocation would likely remain fully unchanged, but be aware of the future
 
 #### Environment Variables
 
-You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon.
+You may also specify server host, port, and password in environment variables `NMCRCON_HOST`, `NMCRCON_PORT`, `NMCRCON_PASS`. When `NMCRCON_` environment variables are not set, nmcrcon will fall back to `MCRCON_` variables for compatibility with Tiiffi/mcrcon. `NMCRCON_` variables has a higher priority and it is possible to use both `NMCRCON_` and `MCRCON_` variables simultaneously.
 
 Additionally, the following `NMCRCON_` variables are available:
 
@@ -140,7 +140,7 @@ I have a list of plans in case I have time and interest to continue investing in
 
 - [x] **`Ctrl-C` behavior** - Alter the behavior so that it only interrupts the current command and allows the user to continue interacting with the shell.
 - [x] **Compability with [Tiiffi/mcrcon](https://github.com/Tiiffi/mcrcon)** - Provide command line options and environment variables that is compatible with `mcrcon`.
-- [ ] **Configuration** - Support configuration files for persistent settings.
+- ~~[ ] **Configuration** - Support configuration files for persistent settings.~~ Not planned now given most features are configured through environment variables.
 - [x] **Customizable prompt** - Implemented via `NMCRCON_PS1` environment variable.
 - [x] **Command history** - Implemented via `NMCRCON_HISTORY` environment variable.
 - [ ] **Tab completion** - Add tab completion support.
