@@ -10,7 +10,8 @@
 #define RCON_TYPE_CMD 2
 #define RCON_TYPE_AUTH_RESP 2
 #define RCON_TYPE_AUTH 3
-#define RCON_TYPE_EOF 0xdeadbeef
+#define RCON_TYPE_EOF 0
+// 0xdeadbeef
 
 static int32_t id = 114514;
 
@@ -126,8 +127,7 @@ int rcon_exec(int fd, char *cmd) {
   int32_t eof_id = id++;
   ssize_t ret = _rcon_pkt_send(fd, cmd_id, RCON_TYPE_CMD, cmd);
   if (ret < 0) return -1;
-  id += 1;
-  ret = _rcon_pkt_send(fd, eof_id, RCON_TYPE_EOF, "done?");
+  ret = _rcon_pkt_send(fd, eof_id, RCON_TYPE_EOF, "");
   if (ret < 0) return -1;
   char *resp = _rcon_resp_recv(fd, cmd_id, eof_id);
   if (!resp) return -1;
