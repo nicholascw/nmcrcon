@@ -4,6 +4,7 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "dbg.h"
@@ -35,7 +36,7 @@ static char doc[] =
     "variables (N)MCRCON_HOST, (N)MCRCON_PORT, (N)MCRCON_PASS. Please note the "
     "NMCRCON_ variables would have higher priorities than MCRCON_ ones.";
 
-static char args_doc[] = "[HOST[:PORT]] [COMMAND]";
+static char args_doc[] = "[HOST[:PORT]] [COMMAND...]";
 
 static struct argp_option options[] = {
     {"host", 'H', "HOST", 0, "Server host"},
@@ -51,7 +52,7 @@ struct arguments {
   char *hostport;
   char *host;
   char *port;
-  char *password;
+  char *credential;
   float wait_sec;
   int verbose;
   int silent;
@@ -70,7 +71,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       arguments->port = arg;
       break;
     case 'p':
-      arguments->password = arg;
+      arguments->credential = arg;
       break;
     case 'q':
     case 's':
@@ -142,8 +143,8 @@ int conf_init_state(int argc, char *argv[]) {
   if (!arguments.port) {
     arguments.port = getenv("NMCRCON_PORT");
   }
-  if (!arguments.password) {
-    arguments.password = getenv("NMCRCON_PASS");
+  if (!arguments.credential) {
+    arguments.credential = getenv("NMCRCON_PASS");
   }
 
   // provide compatibility to Tiiffi/mcrcon
@@ -153,8 +154,8 @@ int conf_init_state(int argc, char *argv[]) {
   if (!arguments.port) {
     arguments.port = getenv("MCRCON_PORT");
   }
-  if (!arguments.password) {
-    arguments.password = getenv("MCRCON_PASS");
+  if (!arguments.credential) {
+    arguments.credential = getenv("MCRCON_PASS");
   }
 
   // copy the values from arguments to nmcrcon_state,
@@ -170,14 +171,14 @@ int conf_init_state(int argc, char *argv[]) {
     perror("strdup(port)");
     exit(1);
   }
-  if (arguments.password) {
-    nmcrcon_state.password = strdup(arguments.password);
-    if (!nmcrcon_state.password) {
-      perror("strdup(password)");
+  if (arguments.credential) {
+    nmcrcon_state.credential = strdup(arguments.credential);
+    if (!nmcrcon_state.credential) {
+      perror("strdup(credential)");
       exit(1);
     }
   } else {
-    nmcrcon_state.password = NULL;
+    nmcrcon_state.credential = NULL;
   }
   const char *history_env = getenv("NMCRCON_HISTORY");
   if (history_env) {
@@ -188,28 +189,32 @@ int conf_init_state(int argc, char *argv[]) {
     }
   } else {
     nmcrcon_state.history_path = NULL;
-    const char *ps1 = getenv("NMCRCON_PS1");
-    nmcrcon_state.prompt = strdup(ps1 ? ps1 : "nmcrcon> ");
-    if (!nmcrcon_state.prompt) {
-      perror("strdup(prompt)");
-      exit(1);
-    }
+  }
+  const char *ps1 = getenv("NMCRCON_PS1");
+  nmcrcon_state.prompt = strdup(ps1 ? ps1 : "nmcrcon> ");
+  if (!nmcrcon_state.prompt) {
+    perror("strdup(prompt)");
+    exit(1);
   }
   nmcrcon_state.wait_sec = arguments.wait_sec;
   nmcrcon_state.verbose = arguments.verbose;
   nmcrcon_state.silent = arguments.silent;
   nmcrcon_state.cmds_c = arguments.cmds_c;
-  nmcrcon_state.cmds_v = calloc(nmcrcon_state.cmds_c, sizeof(char *));
-  if (!nmcrcon_state.cmds_v) {
-    perror("calloc(cmds_v)");
-    exit(1);
-  }
-  for (int i = 0; i < nmcrcon_state.cmds_c; i++) {
-    nmcrcon_state.cmds_v[i] = strdup(arguments.cmds_v[i]);
-    if (!nmcrcon_state.cmds_v[i]) {
-      perror("strdup(cmds_v)");
+  if (nmcrcon_state.cmds_c > 0) {
+    nmcrcon_state.cmds_v = calloc(nmcrcon_state.cmds_c, sizeof(char *));
+    if (!nmcrcon_state.cmds_v) {
+      perror("calloc(cmds_v)");
       exit(1);
     }
+    for (int i = 0; i < nmcrcon_state.cmds_c; i++) {
+      nmcrcon_state.cmds_v[i] = strdup(arguments.cmds_v[i]);
+      if (!nmcrcon_state.cmds_v[i]) {
+        perror("strdup(cmds_v)");
+        exit(1);
+      }
+    }
+  } else {
+    nmcrcon_state.cmds_v = NULL;
   }
 
   return 0;

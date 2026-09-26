@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "conf.h"
 #include "socket.h"
 
 #define RCON_TYPE_RESP 0
@@ -11,6 +12,8 @@
 #define RCON_TYPE_AUTH_RESP 2
 #define RCON_TYPE_AUTH 3
 #define RCON_TYPE_EOF 0
+#define RCON_MIN_PACKET_SIZE 10
+#define RCON_MAX_PACKET_SIZE 4096
 // 0xdeadbeef
 
 static int32_t id = 114514;
@@ -58,6 +61,10 @@ char *_rcon_pkt_recv(int fd, int32_t *id) {
     return NULL;
   }
   len = le32toh(len);
+  if (len < RCON_MIN_PACKET_SIZE || len > RCON_MAX_PACKET_SIZE) {
+    fprintf(stderr, "_rcon_pkt_recv: invalid packet size %d\n", len);
+    return NULL;
+  }
   char *buf = malloc(len);
   if (!buf) {
     perror("malloc");
@@ -131,22 +138,23 @@ int rcon_exec(int fd, char *cmd) {
   if (ret < 0) return -1;
   char *resp = _rcon_resp_recv(fd, cmd_id, eof_id);
   if (!resp) return -1;
-  printf("%s\n", resp);
+  if (!nmcrcon_state.silent) printf("%s\n", resp);
   free(resp);
   return 0;
 }
 
-int rcon_auth(int fd, char *password) {
+int rcon_auth(int fd, char *credential) {
   int32_t auth_id = id++;
   int32_t auth_resp_id;
-  ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, password);
+  ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, credential);
   if (ret < 0) return -1;
   char *resp = _rcon_pkt_recv(fd, &auth_resp_id);
   if (resp) free(resp);
   if (!resp || auth_resp_id == -1) {
-    printf("Authentication failed.\n");
+    fprintf(stderr, "Authentication failed.\n");
     return -1;
-  } else
-    printf("Authenticated.\n");
+  } else if (nmcrcon_state.verbose && !nmcrcon_state.silent) {
+    fprintf(stderr, "Authenticated.\n");
+  }
   return 0;
 }

@@ -74,13 +74,6 @@ ssize_t recv_pkt(int sockfd, char *buf, size_t bufsize) {
 
 */
 
-static void *_socket_get_in_addr(struct sockaddr *sa) {
-  if (sa->sa_family == AF_INET) {
-    return &(((struct sockaddr_in *)sa)->sin_addr);
-  }
-  return &(((struct sockaddr_in6 *)sa)->sin6_addr);
-}
-
 #if 0
 static int _socket_set_nonblk(int fd) {
   return fcntl(fd, F_SETFL, fcntl(fd, F_GETFL) | O_NONBLOCK);
@@ -111,10 +104,6 @@ int socket_tryconnect(char *hostname, char *port) {
       perror("connect");
       continue;
     }
-    char s[INET6_ADDRSTRLEN];
-    inet_ntop(p->ai_family, _socket_get_in_addr((struct sockaddr *)p->ai_addr),
-              s, sizeof s);
-    fprintf(stderr, "Connecting to %s (%s:%s)...\n", hostname, s, port);
     break;
   }
 

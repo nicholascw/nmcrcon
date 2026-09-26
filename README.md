@@ -35,16 +35,9 @@ Usage: nmcrcon [OPTION...] [HOST[:PORT]] [COMMAND]
       --usage                Give a short usage message
   -V, --version              Print program version
 ```
+`[COMMAND]` is optional and may be repeated. Each command line argument is treated as one command, so shell quoting may be used to keep spaces inside a single command. `--wait` applies between queued commands and scripted commands. `--quiet` suppresses command output, while `--verbose` prints connection and execution details.
 
-However, the `[COMMAND]` and the following options has not been implemented yet:
-
-```
-  -q, -s, --quiet, --silent  Don't produce any output
-  -v, --verbose              Output more information
-  -w, --wait=SECONDS         Wait duration in between each command
-```
-
-Current version of `nmcrcon` is still fully compatible with the early version invocation, but `-H` and `-P` must not present. They would have a higher priority than `[HOST[:PORT]]` so that `[COMMAND]` without host or port specified in `[HOST[:PORT]]` can be correctly supported.
+Current version of `nmcrcon` is still fully compatible with the early version invocation, but `-H` and `-P` take a higher priority than `[HOST[:PORT]]`. That makes it possible to run one or more `[COMMAND]` arguments without putting host or port information in the positional argument.
 
 <details>
 <summary>Early Version Invocation</summary>
@@ -71,6 +64,16 @@ Additionally, the following `NMCRCON_` variables are available:
 
 - `NMCRCON_HISTORY` — File path to persist command history across sessions. Unset by default (no history persistence).
 - `NMCRCON_PS1` — Custom shell prompt string. Defaults to `nmcrcon> `.
+
+#### Non-interactive commands and scripts
+
+`nmcrcon` can be used without entering the interactive shell:
+
+- Pass one or more `[COMMAND]` arguments to execute them in order.
+- Pipe commands on standard input to execute them line-by-line.
+- Use the built-in `source FILE` command to run a script file from the interactive shell, command mode, or another script.
+
+Blank lines and lines beginning with `#` are ignored in scripted input.
 
 #### The console shortcuts
 
@@ -125,6 +128,8 @@ CTRL-Z         SUSPEND PROCESS
 ```
 </details>
 
+The interactive shell also supports tab completion for built-in commands.
+
 #### Built-in Commands
 
 Like Linux shells, `nmcrcon` supports built-in commands and is designed to be easily expandable. Below is the exhaustive list of all built-in commands for the current version, and may expand in future versions. Note that built-in commands has a higher priority than RCON commands in case of a conflict. 
@@ -133,7 +138,11 @@ Like Linux shells, `nmcrcon` supports built-in commands and is designed to be ea
 | :-----: | :------------------------------------ |
 | `auth`  | Re-invoke the authentication process. |
 | `clear` | Clears the screen.                    |
+| `connect [HOST[:PORT]]` | Connects or reconnects to a server. |
+| `disconnect` | Disconnects from the current server. |
 | `exit`  | Exits the `nmcrcon` shell.            |
+| `sleep SECONDS` | Waits for the given duration. |
+| `source FILE` | Executes commands from a script file. |
 
 ## Roadmap
 I have a list of plans in case I have time and interest to continue investing in this project, which may introduce significant breaking changes in near future. Therefore, currently there is no versioning plans in place for now. Any who uses `nmcrcon` or interested in contributing to this project should be aware of the potential changes in future versions. The following are current TODOs, which will likely be implemented in the given order.
@@ -143,10 +152,10 @@ I have a list of plans in case I have time and interest to continue investing in
 - [ ] ~~**Configuration** - Support configuration files for persistent settings.~~ Not planned now given most features are configured through environment variables.
 - [x] **Customizable prompt** - Implemented via `NMCRCON_PS1` environment variable.
 - [x] **Command history** - Implemented via `NMCRCON_HISTORY` environment variable.
-- [ ] **Tab completion** - Add tab completion support.
-- [ ] **More built-in commands** - Prepare for scripting functionality, add commands such as `sleep`,`connect`,`disconnect`.
-- [ ] **Scripting** - Allow users to write scripts using `nmcrcon` commands.
-- [ ] **`man` page** - Create a man page for `nmcrcon`.
+- [x] **Tab completion** - Built-in commands can now be completed with `Tab`.
+- [x] **More built-in commands** - Added `sleep`, `connect`, `disconnect`, and `source`.
+- [x] **Scripting** - Commands can be piped on stdin or loaded from script files.
+- [x] **`man` page** - A `nmcrcon.1` man page is included in the repository.
 
 Versioning or releases may come by the time about half of these are ticked, but I'm not sure yet. I may also work on a potential pre-built executable distribution with GitHub Actions, as well as potential Windows / macOS binaries, at some point.
 
