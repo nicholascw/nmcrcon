@@ -27,8 +27,8 @@ int cmdh_clear(STD_CMDH_ARGS) {
 }
 
 int cmdh_auth(STD_CMDH_ARGS) {
-  const char *password = cmd_args(input);
-  return shell_auth(state, password) == SHELL_RESULT_OK ? 1 : 0;
+  const char *credential = cmd_args(input);
+  return shell_auth(state, credential) == SHELL_RESULT_OK ? 1 : 0;
 }
 
 int cmdh_sleep(STD_CMDH_ARGS) {

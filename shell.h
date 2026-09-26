@@ -14,7 +14,7 @@ typedef struct shell_state {
   int interactive;
 } shell_state_t;
 
-shell_result_t shell_auth(shell_state_t *state, const char *password);
+shell_result_t shell_auth(shell_state_t *state, const char *credential);
 shell_result_t shell_connect(shell_state_t *state, const char *hostport);
 shell_result_t shell_disconnect(shell_state_t *state);
 shell_result_t shell_exec_line(shell_state_t *state, const char *input);

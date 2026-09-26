@@ -73,41 +73,41 @@ static void shell_apply_hostport(const char *hostport) {
   free(copy);
 }
 
-static void shell_update_password(const char *password) {
-  if (!password) return;
-  shell_replace_string(&nmcrcon_state.password, password);
+static void shell_update_credential(const char *credential) {
+  if (!credential) return;
+  shell_replace_string(&nmcrcon_state.credential, credential);
 }
 
 static shell_result_t shell_prompt_auth(shell_state_t *state) {
   int auth_result = -1;
-  char *password = NULL;
+  char *credential = NULL;
   int failed_cnt = 0;
 
   while (failed_cnt < 3) {
-    if (password) {
-      memset(password, '\0', strlen(password));
-      free(password);
-      password = NULL;
+    if (credential) {
+      memset(credential, '\0', strlen(credential));
+      free(credential);
+      credential = NULL;
     }
     failed_cnt++;
     bestlineMaskModeEnable();
-    password = bestline("Password: ");
+    credential = bestline("Password: ");
     bestlineMaskModeDisable();
-    if (!password) password = strdup("");
-    if (!password) {
+    if (!credential) credential = strdup("");
+    if (!credential) {
       perror("strdup");
       return SHELL_RESULT_ERROR;
     }
-    auth_result = rcon_auth(state->rconfd, password);
+    auth_result = rcon_auth(state->rconfd, credential);
     if (auth_result == 0) {
-      shell_update_password(password);
+      shell_update_credential(credential);
       break;
     }
   }
 
-  if (password) {
-    memset(password, '\0', strlen(password));
-    free(password);
+  if (credential) {
+    memset(credential, '\0', strlen(credential));
+    free(credential);
   }
   return auth_result == 0 ? SHELL_RESULT_OK : SHELL_RESULT_ERROR;
 }
@@ -158,19 +158,19 @@ static void shell_completion(const char *buf, int pos,
   }
 }
 
-shell_result_t shell_auth(shell_state_t *state, const char *password) {
+shell_result_t shell_auth(shell_state_t *state, const char *credential) {
   if (!state->connected) {
     fprintf(stderr, "Not connected.\n");
     return SHELL_RESULT_ERROR;
   }
 
-  if (password && *password) {
-    if (rcon_auth(state->rconfd, (char *)password) == 0) {
-      shell_update_password(password);
+  if (credential && *credential) {
+    if (rcon_auth(state->rconfd, (char *)credential) == 0) {
+      shell_update_credential(credential);
       return SHELL_RESULT_OK;
     }
-  } else if (nmcrcon_state.password && *nmcrcon_state.password) {
-    if (rcon_auth(state->rconfd, nmcrcon_state.password) == 0) {
+  } else if (nmcrcon_state.credential && *nmcrcon_state.credential) {
+    if (rcon_auth(state->rconfd, nmcrcon_state.credential) == 0) {
       return SHELL_RESULT_OK;
     }
   }

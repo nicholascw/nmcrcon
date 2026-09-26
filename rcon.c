@@ -143,10 +143,10 @@ int rcon_exec(int fd, char *cmd) {
   return 0;
 }
 
-int rcon_auth(int fd, char *password) {
+int rcon_auth(int fd, char *credential) {
   int32_t auth_id = id++;
   int32_t auth_resp_id;
-  ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, password);
+  ssize_t ret = _rcon_pkt_send(fd, auth_id, RCON_TYPE_AUTH, credential);
   if (ret < 0) return -1;
   char *resp = _rcon_pkt_recv(fd, &auth_resp_id);
   if (resp) free(resp);

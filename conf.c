@@ -52,7 +52,7 @@ struct arguments {
   char *hostport;
   char *host;
   char *port;
-  char *password;
+  char *credential;
   float wait_sec;
   int verbose;
   int silent;
@@ -71,7 +71,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
       arguments->port = arg;
       break;
     case 'p':
-      arguments->password = arg;
+      arguments->credential = arg;
       break;
     case 'q':
     case 's':
@@ -143,8 +143,8 @@ int conf_init_state(int argc, char *argv[]) {
   if (!arguments.port) {
     arguments.port = getenv("NMCRCON_PORT");
   }
-  if (!arguments.password) {
-    arguments.password = getenv("NMCRCON_PASS");
+  if (!arguments.credential) {
+    arguments.credential = getenv("NMCRCON_PASS");
   }
 
   // provide compatibility to Tiiffi/mcrcon
@@ -154,8 +154,8 @@ int conf_init_state(int argc, char *argv[]) {
   if (!arguments.port) {
     arguments.port = getenv("MCRCON_PORT");
   }
-  if (!arguments.password) {
-    arguments.password = getenv("MCRCON_PASS");
+  if (!arguments.credential) {
+    arguments.credential = getenv("MCRCON_PASS");
   }
 
   // copy the values from arguments to nmcrcon_state,
@@ -171,14 +171,14 @@ int conf_init_state(int argc, char *argv[]) {
     perror("strdup(port)");
     exit(1);
   }
-  if (arguments.password) {
-    nmcrcon_state.password = strdup(arguments.password);
-    if (!nmcrcon_state.password) {
-      perror("strdup(password)");
+  if (arguments.credential) {
+    nmcrcon_state.credential = strdup(arguments.credential);
+    if (!nmcrcon_state.credential) {
+      perror("strdup(credential)");
       exit(1);
     }
   } else {
-    nmcrcon_state.password = NULL;
+    nmcrcon_state.credential = NULL;
   }
   const char *history_env = getenv("NMCRCON_HISTORY");
   if (history_env) {
