@@ -6,21 +6,31 @@
 #include "conf.h"
 #include "dbg.h"
 #include "shell.h"
-#include "socket.h"
 
 int main(int argc, char *argv[]) {
   conf_init_state(argc, argv);
-  int connect_fd =
-      socket_tryconnect(nmcrcon_state.host ? nmcrcon_state.host : "127.0.0.1",
-                        nmcrcon_state.port ? nmcrcon_state.port : "25575");
-  if (connect_fd < 0) {
-    fprintf(stderr, "Failed to connect to %s:%s\n", nmcrcon_state.host,
-            nmcrcon_state.port);
-    conf_usage(argv[0]);
-    exit(1);
-  }
-  shell_loop(connect_fd);
-  close(connect_fd);
 
-  return 0;
+  shell_state_t shell_state = {
+      .rconfd = -1,
+      .connected = 0,
+      .interactive = isatty(STDIN_FILENO),
+  };
+
+  if (shell_connect(&shell_state, NULL) != SHELL_RESULT_OK) {
+    if (nmcrcon_state.cmds_c > 0 || !shell_state.interactive) return 1;
+    conf_usage(argv[0]);
+    return 1;
+  }
+
+  shell_result_t ret = SHELL_RESULT_OK;
+  if (nmcrcon_state.cmds_c > 0) {
+    ret = shell_run_commands(&shell_state);
+  } else if (!shell_state.interactive) {
+    ret = shell_run_stream(&shell_state, stdin, "stdin");
+  } else {
+    ret = shell_loop(&shell_state);
+  }
+
+  shell_disconnect(&shell_state);
+  return ret == SHELL_RESULT_ERROR ? 1 : 0;
 }

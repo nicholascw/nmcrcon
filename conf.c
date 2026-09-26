@@ -4,6 +4,7 @@
 #include <error.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "dbg.h"
@@ -35,7 +36,7 @@ static char doc[] =
     "variables (N)MCRCON_HOST, (N)MCRCON_PORT, (N)MCRCON_PASS. Please note the "
     "NMCRCON_ variables would have higher priorities than MCRCON_ ones.";
 
-static char args_doc[] = "[HOST[:PORT]] [COMMAND]";
+static char args_doc[] = "[HOST[:PORT]] [COMMAND...]";
 
 static struct argp_option options[] = {
     {"host", 'H', "HOST", 0, "Server host"},
@@ -188,28 +189,32 @@ int conf_init_state(int argc, char *argv[]) {
     }
   } else {
     nmcrcon_state.history_path = NULL;
-    const char *ps1 = getenv("NMCRCON_PS1");
-    nmcrcon_state.prompt = strdup(ps1 ? ps1 : "nmcrcon> ");
-    if (!nmcrcon_state.prompt) {
-      perror("strdup(prompt)");
-      exit(1);
-    }
+  }
+  const char *ps1 = getenv("NMCRCON_PS1");
+  nmcrcon_state.prompt = strdup(ps1 ? ps1 : "nmcrcon> ");
+  if (!nmcrcon_state.prompt) {
+    perror("strdup(prompt)");
+    exit(1);
   }
   nmcrcon_state.wait_sec = arguments.wait_sec;
   nmcrcon_state.verbose = arguments.verbose;
   nmcrcon_state.silent = arguments.silent;
   nmcrcon_state.cmds_c = arguments.cmds_c;
-  nmcrcon_state.cmds_v = calloc(nmcrcon_state.cmds_c, sizeof(char *));
-  if (!nmcrcon_state.cmds_v) {
-    perror("calloc(cmds_v)");
-    exit(1);
-  }
-  for (int i = 0; i < nmcrcon_state.cmds_c; i++) {
-    nmcrcon_state.cmds_v[i] = strdup(arguments.cmds_v[i]);
-    if (!nmcrcon_state.cmds_v[i]) {
-      perror("strdup(cmds_v)");
+  if (nmcrcon_state.cmds_c > 0) {
+    nmcrcon_state.cmds_v = calloc(nmcrcon_state.cmds_c, sizeof(char *));
+    if (!nmcrcon_state.cmds_v) {
+      perror("calloc(cmds_v)");
       exit(1);
     }
+    for (int i = 0; i < nmcrcon_state.cmds_c; i++) {
+      nmcrcon_state.cmds_v[i] = strdup(arguments.cmds_v[i]);
+      if (!nmcrcon_state.cmds_v[i]) {
+        perror("strdup(cmds_v)");
+        exit(1);
+      }
+    }
+  } else {
+    nmcrcon_state.cmds_v = NULL;
   }
 
   return 0;

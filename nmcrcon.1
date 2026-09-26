@@ -1,0 +1,105 @@
+.TH NMCRCON 1 "2026-09-26" "nmcrcon" "User Commands"
+.SH NAME
+nmcrcon \- Minecraft RCON client with an interactive shell
+.SH SYNOPSIS
+.B nmcrcon
+[\fIOPTION\fR...]
+[\fIHOST\fR[:\fIPORT\fR]]
+[\fICOMMAND\fR...]
+.SH DESCRIPTION
+.B nmcrcon
+connects to a Minecraft RCON server and either starts an interactive shell or
+executes commands non-interactively.
+.PP
+Each positional
+.I COMMAND
+argument is treated as one command. Use shell quoting to include spaces inside a
+single command. When standard input is not a terminal,
+.B nmcrcon
+reads commands line-by-line from standard input. Blank lines and lines beginning
+with
+.B #
+are ignored.
+.SH OPTIONS
+.TP
+.B \-H, \-\-host=\fIHOST\fR
+Server host.
+.TP
+.B \-P, \-\-port=\fIPORT\fR
+Server port.
+.TP
+.B \-p, \-\-pass=\fIPASSWORD\fR
+RCON password.
+.TP
+.B \-q, \-s, \-\-quiet, \-\-silent
+Suppress command output.
+.TP
+.B \-v, \-\-verbose
+Print connection and execution details.
+.TP
+.B \-w, \-\-wait=\fISECONDS\fR
+Wait between queued commands and scripted commands.
+.TP
+.B \-?, \-\-help
+Show the full help text.
+.TP
+.B \-\-usage
+Show a short usage message.
+.TP
+.B \-V, \-\-version
+Print the program version.
+.SH ENVIRONMENT
+.TP
+.B NMCRCON_HOST
+Default server host.
+.TP
+.B NMCRCON_PORT
+Default server port.
+.TP
+.B NMCRCON_PASS
+Default RCON password.
+.TP
+.B MCRCON_HOST, MCRCON_PORT, MCRCON_PASS
+Compatibility fallbacks for Tiiffi/mcrcon environment variables.
+.TP
+.B NMCRCON_HISTORY
+Path used to persist interactive command history.
+.TP
+.B NMCRCON_PS1
+Interactive shell prompt string. The default prompt is
+.BR "nmcrcon> " .
+.SH BUILT-IN COMMANDS
+.TP
+.B auth
+Re-run authentication. An optional password may be provided as
+.BR "auth PASSWORD" .
+.TP
+.B clear
+Clear the screen.
+.TP
+.B connect [\fIHOST\fR[:\fIPORT\fR]]
+Connect or reconnect to a server. When an argument is supplied it becomes the
+new target endpoint.
+.TP
+.B disconnect
+Disconnect from the current server.
+.TP
+.B exit
+Exit the shell.
+.TP
+.B sleep \fISECONDS\fR
+Pause execution for the given number of seconds.
+.TP
+.B source \fIFILE\fR
+Execute commands from a script file.
+.SH INTERACTIVE SHELL
+The interactive shell is powered by
+.BR bestline (3)
+and supports history, prompt customization, shell shortcuts, and tab completion
+for built-in commands.
+.SH FILES
+.TP
+.B nmcrcon.1
+This manual page.
+.SH SEE ALSO
+.BR bestline (3)
